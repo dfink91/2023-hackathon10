@@ -1,8 +1,6 @@
-
 "use client"
 
 import React, { useEffect, useMemo } from "react"
-
 
 export default function Home() {
   const msg = useMemo(() => {
@@ -11,14 +9,13 @@ export default function Home() {
     return speechMsg
   }, [])
 
-  useEffect(() => {
-    window.speechSynthesis.speak(msg)
-  }, [msg])
+  // useEffect(() => {
+  //   window.speechSynthesis.speak(msg);
+  // }, [msg]);
 
   return (
-    <div className='App'>
+    <div className="App">
       <h1>React Text to Speech App</h1>
     </div>
   )
 }
-
