@@ -1,5 +1,6 @@
 const express = require("express")
 const multer = require("multer")
+const { processGoogleSTT } = require("./google-stt");
 
 const app = express()
 const upload = multer({ storage: multer.memoryStorage() })
@@ -18,14 +19,26 @@ app.post("/", (req, res) => {
   return res.send("Hello Hackathon1010 post")
 })
 
+app.get("/", async (req, res) => {
+  let result = await processGoogleSTT();
+  console.log(result);
+  res.send("Result: "+result);
+});
+
 app.post("/ride-from-speech", upload.single("audio"), async (req, res) => {
-  console.log("transcribeWhisper called")
+  console.log("ride-from-speech called")
+  // todo audio to wav
+  // const audioBuffer = req.file.buffer;
+  // todo pass wav file or path to service
+  let textResponse = await processGoogleSTT();
+  // todo call Rasa or ChatGPT for entity recognition
+
   res.send({
     departure: "St. Ulrich",
     destination: "Klausen",
     date: "2023-11-18 14:00",
     passengers: 2,
-    textResponse: "Fahrt von St. Ul",
+    textResponse: textResponse,
     audioResponse: "uuid",
   })
 })
