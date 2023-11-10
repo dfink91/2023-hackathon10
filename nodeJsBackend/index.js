@@ -1,36 +1,75 @@
-const express = require("express");
-const multer = require("multer");
-const { spawn } = require("child_process");
+const express = require("express")
+const multer = require("multer")
 
-const app = express();
-const upload = multer({ storage: multer.memoryStorage() });
+const app = express()
+const upload = multer({ storage: multer.memoryStorage() })
 
 app.listen(8080, () => {
-  console.log("Starting to listen on port 8080");
-});
+  console.log("Starting to listen on port 8080")
+})
 
 app.get("/", (req, res) => {
-  console.log("Hello backend");
-  res.send("Hello Hackathon1010");
-});
+  console.log("Hello backend")
+  return res.send({ x: "Hello Hackathon1010" })
+})
 
-app.post("/transcribeWhisper", upload.single("audio"), (req, res) => {
-  const audioBuffer = req.file.buffer;
+app.post("/", (req, res) => {
+  console.log("Hello backend post")
+  return res.send("Hello Hackathon1010 post")
+})
 
-  // Save the buffer to a temporary file or directly stream it to Whisper
-  // For simplicity, let's assume we're directly passing the buffer to a Whisper process
+app.post("/ride-from-speech", upload.single("audio"), async (req, res) => {
+  console.log("transcribeWhisper called")
+  res.send({
+    departure: "St. Ulrich",
+    destination: "Klausen",
+    date: "2023-11-18 14:00",
+    passengers: 2,
+    textResponse: "Fahrt von St. Ul",
+    audioResponse: "uuid",
+  })
+})
 
-  const whisper = spawn("whisper", ["--", "-"]);
+app.get("/audio-response", (req, res) => {
+  console.log("Hello backend")
+  return res.send("bo") // TODO return an audio file for frontend
+})
 
-  whisper.stdin.write(audioBuffer);
-  whisper.stdin.end();
+app.post("save-ride-to-mooovex", async (req, res) => {
+  req.body = {
+    departure: "St. Ulrich",
+    destination: "Klausen",
+    date: "2023-11-18 14:00",
+    passengers: 2,
+    textResponse: "",
+    audioResponse: "uuid",
+  }
 
-  let transcription = "";
-  whisper.stdout.on("data", (data) => {
-    transcription += data.toString();
-  });
+  // TODO Save ride to movex
+  return res.send({ mooovexId: "mId" })
+})
 
-  whisper.on("close", () => {
-    res.send({ transcription });
-  });
-});
+async function transcribeAudioWithWhisper(audioFile) {
+  return "This will be transcribed text"
+  // const apiKey = ""; // Replace with your actual API key
+  // const endpoint = "https://api.openai.com/v1/whisper-transcribe"; // Replace with the actual Whisper API endpoint
+
+  // let formData = new FormData();
+  // formData.append("file", audioFile);
+
+  // try {
+  //   const response = await fetch(endpoint, {
+  //     method: "POST",
+  //     headers: {
+  //       Authorization: `Bearer ${apiKey}`,
+  //       // Add other necessary headers
+  //     },
+  //     body: formData,
+  //   });
+
+  //   const data = await response.json();
+  //   return data.transcription; // Or however the response is structured
+  // } catch (error) {
+  //   console.error("Error transcribing audio:", error);
+  // }
+}
