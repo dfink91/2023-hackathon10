@@ -1,5 +1,5 @@
 // todo enable here and set ENV variable for API KEY
-const enableGoogleSTT = false;
+const enableAudioToText = false;
 const keyFilePath = '/Users/lukas/IdeaProjects/NoiHack23/noihackathon23-bcc9300070d9.json';
 const fs = require('fs');
 
@@ -7,8 +7,8 @@ const speech = require('@google-cloud/speech');
 
 
 
-const processGoogleSTT = async () => {
-    if (!enableGoogleSTT){
+const audioToText = async () => {
+    if (!enableAudioToText){
         return "bitte ein Taxi von St Ulrich zum Hotel Goldener Adler für zwei Personen mit Skiausrüstung (MOCK)";
     }
     const keyFile = JSON.parse(fs.readFileSync(keyFilePath));
@@ -49,4 +49,4 @@ const processGoogleSTT = async () => {
     return transcription;
 }
 
-module.exports = { processGoogleSTT };
+module.exports = { audioToText };
