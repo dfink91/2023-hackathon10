@@ -29,7 +29,7 @@ function enhanceBotEntities(botResponse) {
             const tomorrowStrings = ["morgen", "tomorrow", "domani"];
             // Get today's date
             if (todayStrings.includes(botResponse.when.date?.toLowerCase())) {
-                botResponse.when.date = today.toISOString().slice(0,10);
+                botResponse.when = "now";
             }
             else if (tomorrowStrings.includes(botResponse.when.date?.toLowerCase())) {
                 // Add one day
@@ -45,23 +45,29 @@ function enhanceBotEntities(botResponse) {
             botResponse.when = "now"
         }
     }
+    botResponse.passengers = botResponse.no_of_people
+    return botResponse
 }
 
 
 function getTextResponse(entities, language) {
-    if (!language)
-        language = defaultLang
+    console.log("texttoresponse", entities)
+    if (entities) {
 
-    switch (language) {
-        case "it":
-            return getTextResponseIt(entities)
-        case "en":
-            return getTextResponseEn(entities)
-        case "de":
-        default:
-            return getTextResponseDe(entities)
+        if (!language)
+            language = defaultLang
+    
+        switch (language) {
+            case "it":
+                return getTextResponseIt(entities)
+            case "en":
+                return getTextResponseEn(entities)
+            case "de":
+            default:
+                return getTextResponseDe(entities)
+        }
     }
-
+    else return "No entities recognized."
 }
 
 
@@ -79,7 +85,7 @@ function getTextResponseDe(entities) {
             resp += ` um ${formatTime(entities.when.time, locale)}`
         resp += ` für ${entities.passengers} Person${entities.passengers >1 ? "en" : ""} registriert.`;
     }
-    resp += " Sie haben 1 Minute Zeit die Fahrt zu löschen."
+    resp += " Automatische Bestätigung nach 1 Minute."
     return resp
 
 }

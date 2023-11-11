@@ -56,20 +56,40 @@ app.post("/ride-from-speech", upload.single("wavfile"), async (req, res) => {
 
     let recognizedText = await audioToText(paths + "/" + fileName);
 
-    let entities = await recognizeEntities(recognizedText)
+    let entities;
+    let cnt=3
+    while (cnt++ < cnt && !entities)
+        entities = await recognizeEntities(recognizedText)
     //entities = { departure: "ads", destination: "asdf", passengers: 3 }
 
-    let textResponse = getTextResponse(entities);
+    if (entities) {
+        let textResponse = getTextResponse(entities);
+        let mooovexResp;
+        try {
+            mooovexResp = await mooovexRideDetails(
+                entities.departure,
+                entities.destination,
+                entities.passengers,
+                entities.when ?? "now",
+                "de");
+        } catch (error) {
+            
+            console.log(error)
+        }
 
-    res.send({
-        departure: entities.departure,
-        destination: entities.destination,
-        date: "now",
-        passengers: entities.passengers,
-        recognizedText: recognizedText,
-        textResponse: textResponse,
-        audioResponse: "uuid",
-    })
+        res.send({
+            departure: entities.departure,
+            destination: entities.destination,
+            date: entities.when,
+            passengers: entities.passengers,
+            recognizedText: recognizedText,
+            textResponse: textResponse,
+            audioResponse: "uuid",
+            mooovexRideDetails: mooovexResp
+        })
+    }
+    else 
+        res.status(401).send({error: "Could not understand voice"})
 })
 
 app.get("/get-mp3", async (req, res) => {
@@ -80,7 +100,7 @@ app.post("/text-to-speech", async (req, res) => {
     console.log("text to speech called for body " + JSON.stringify(req.body))
     const textInput = req.body.textInput;
     const result = await textToAudio(textInput);
-    const mp3FilePath = path.join(__dirname, 'assets', 'mock-response-st-ulrich-de.mp3');
+    const mp3FilePath = path.join(__dirname, 'generatedAudio', 'production-text-to-speech.mp3');
 
     try {
         console.log(mp3FilePath)
