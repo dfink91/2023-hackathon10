@@ -55,7 +55,7 @@ app.post("/ride-from-speech",  async (req, res) => {
     res.send({
         departure: entities.departure,
         destination: entities.destination,
-        date: "2023-11-18 14:00",
+        date: "now",
         passengers: entities.passengers,
         recognizedText: recognizedText,
         textResponse: textResponse,
