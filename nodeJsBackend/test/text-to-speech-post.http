@@ -1,0 +1,7 @@
+POST http://localhost:8080/text-to-speech
+Content-Type: application/json
+
+{
+  "textInput" : "Bitte ein Taxi von Bozen nach Meran"
+}
+
