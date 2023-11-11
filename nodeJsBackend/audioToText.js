@@ -7,7 +7,7 @@ const speech = require('@google-cloud/speech');
 
 
 
-const audioToText = async () => {
+const audioToText = async (fileName) => {
     if (!enableAudioToText){
         return "bitte ein Taxi von St Ulrich zum Hotel Goldener Adler für zwei Personen mit Skiausrüstung (MOCK)";
     }
@@ -18,7 +18,7 @@ const audioToText = async () => {
             private_key: keyFile.private_key,
         },
     });
-    const fileName = 'assets/mock-request-taxi-sankt-ulrich-goldener-adler2.wav'; // Replace with the path to your WAV file
+    //const fileName = 'assets/mock-request-taxi-sankt-ulrich-goldener-adler2.wav'; // Replace with the path to your WAV file
 
     // Reads the audio file into memory
     const file = fs.readFileSync(fileName);

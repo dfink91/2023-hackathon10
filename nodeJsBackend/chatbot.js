@@ -105,19 +105,18 @@ function formatTime(timeString, locale) {
     // Assuming the date as today for the purpose of creating a Date object
     timeString = timeString.slice(0,5)
     const date = new Date(`1970-01-01T${timeString}:00Z`);
-    
+
     // Use Intl.DateTimeFormat to format the time in German
     const formatter = new Intl.DateTimeFormat(locale, {
         hour: '2-digit',
         minute: '2-digit',
         hour12: false // Use 24-hour format
     });
-    
+
     const localizedTime = formatter.format(date);
-    
+
     // console.log(localizedDate);
     return localizedTime
 }
 
   module.exports = { recognizeEntities, getTextResponse }
-  
