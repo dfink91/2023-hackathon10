@@ -64,15 +64,28 @@ app.post("/ride-from-speech", upload.single("wavfile"), async (req, res) => {
 
     if (entities) {
         let textResponse = getTextResponse(entities);
-    
+        let mooovexResp;
+        try {
+            mooovexResp = await mooovexRideDetails(
+                entities.departure,
+                entities.destination,
+                entities.passengers,
+                entities.when ?? "now",
+                "de");
+        } catch (error) {
+            
+            console.log(error)
+        }
+
         res.send({
             departure: entities.departure,
             destination: entities.destination,
-            date: "now",
+            date: entities.when,
             passengers: entities.passengers,
             recognizedText: recognizedText,
             textResponse: textResponse,
             audioResponse: "uuid",
+            mooovexRideDetails: mooovexResp
         })
     }
     else 

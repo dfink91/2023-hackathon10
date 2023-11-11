@@ -7,6 +7,7 @@ import { useState, useEffect } from "react";
 
 function RecorderJSDemo() {
   const [audioBlob, setAudioBlob] = useState(null);
+  const [data, setData] = useState("")
   let gumStream = null;
   let recorder = null;
   let audioContext = null;
@@ -64,14 +65,14 @@ function RecorderJSDemo() {
     }
   };
 
-  const textToSpeech = async () => {
+  const textToSpeech = async (text) => {
     try {
       const response = await fetch('http://localhost:8080/text-to-speech', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ textInput: 'Hello, this is a test.' }),
+        body: JSON.stringify({ textInput: text }),
       });
   
       if (!response.ok) {
@@ -99,7 +100,8 @@ function RecorderJSDemo() {
       headers: { "content-type": "multipart/form-data" },
     };
     let response = await axios.post("http://localhost:8080/ride-from-speech", data, config);
-
+    setData(response.data)
+    textToSpeech(response.data.textResponse)
     console.log(response.data)
   };
 
@@ -113,13 +115,20 @@ function RecorderJSDemo() {
         Stop
       </button>
 
-      <button className="w-16 h-8 rounded bg-blue-400 m-2" onClick={textToSpeech} type="button">
-        text to speech
-      </button>
       </div>
 
+      <div className="text-sm">Start: {data.departure}</div>
+      <div className="text-sm">Ziel: {data.destination}</div>
+      <div className="text-sm">Personen: {data.passengers}</div>
+      <div className="text-sm">Preis: {data?.mooovexRideDetails?.price}</div>
+      <div className="text-sm">Erkannter Text: {data.recognizedText}</div>
+      <div className="text-sm">Antwort in Textform: {data.textResponse}</div>
+
+
+      
+
       {audioBlob && (
-        <audio controls onError={(e) => console.error('Audio playback error:', e)}>
+        <audio className="hidden" autoPlay controls onError={(e) => console.error('Audio playback error:', e)}>
 <source src={URL.createObjectURL(audioBlob)} type="audio/mp3" />
         Your browser does not support the audio element.
       </audio>

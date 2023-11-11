@@ -1,4 +1,4 @@
-const enableAudioToText = false;
+const enableAudioToText = true;
 const fs = require('fs');
 
 const speech = require('@google-cloud/speech');
