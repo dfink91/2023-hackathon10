@@ -3,7 +3,7 @@ const multer = require("multer")
 const { processGoogleSTT } = require("./google-stt");
 
 const app = express()
-const upload = multer({ storage: multer.memoryStorage() })
+//const upload = multer({ storage: multer.memoryStorage() })
 
 app.use((req, res, next) => {
   res.header('Access-Control-Allow-Origin', 'http://localhost:3000');
@@ -32,7 +32,7 @@ app.get("/", async (req, res) => {
   res.send("Result: "+result);
 });
 
-app.post("/ride-from-speech", upload.single("audio"), async (req, res) => {
+app.post("/ride-from-speech",  async (req, res) => {
   console.log("ride-from-speech called")
   // todo audio to wav
   // const audioBuffer = req.file.buffer;
