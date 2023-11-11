@@ -1,12 +1,12 @@
-const fs = require('fs');
 const enableTextToAudio = false;
+const fs = require('fs');
 
 const textToSpeech = require('@google-cloud/text-to-speech');
 const util = require('util');
 
 const textToAudio = async (text) => {
     if (!enableTextToAudio) {
-        let fileURL = "https://www.dropbox.com/scl/fi/nttzxj4wgy9rqk0bkej5w/mock-text-to-speech.mp3?rlkey=m8cyoxfy8ita0jqs8qj9qn69n&dl=0"
+        let fileURL = "nodeJsBackend/assets/mock-text-to-speech.mp3"
         return { audioFileURL: fileURL }
     }
 
@@ -31,7 +31,7 @@ const textToAudio = async (text) => {
 
     const [response] = await client.synthesizeSpeech(request);
     const writeFile = util.promisify(fs.writeFile);
-    let filePath = '/Users/lukas/IdeaProjects/NoiHack23/output.mp3';
+    let filePath = 'generatedAudio/production-text-to-speech.mp3';
     await writeFile(filePath, response.audioContent, 'binary');
     console.log('Audio content written to file: output.mp3');
     // todo upload
