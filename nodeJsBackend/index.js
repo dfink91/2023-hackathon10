@@ -9,6 +9,9 @@ app.use(express.json())
 
 //const upload = multer({ storage: multer.memoryStorage() })
 
+app.use(express.json());
+
+
 app.use((req, res, next) => {
   res.header('Access-Control-Allow-Origin', 'http://localhost:3000');
   res.header('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
@@ -55,9 +58,8 @@ app.post("/ride-from-speech",  async (req, res) => {
 })
 
 app.post("/text-to-speech", async (req, res) => {
-    console.log("text to speech called for " + JSON.stringify(req.body))
-    // todo use real text
-    const textInput = "Bitte ein Taxi von Sankt Ulrich zum Hotel Goldener Adler für zwei personen mit Skiausrüstung";
+    console.log("text to speech called for body " + JSON.stringify(req.body))
+    const textInput = req.body.textInput;
     const result = await textToAudio(textInput);
     res.send({
         urlToAudio: result
