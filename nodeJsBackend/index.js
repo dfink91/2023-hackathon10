@@ -2,7 +2,8 @@ const express = require("express")
 const multer = require("multer")
 const { audioToText } = require("./audioToText");
 const { textToAudio } = require("./textToAudio");
-const { mooovexQuery, mooovexRideDetails } = require("./mooovex")
+const { mooovexQuery, mooovexRideDetails } = require("./mooovex");
+const { recognizeEntities, getTextResponse } = require("./chatbot");
 
 const app = express()
 app.use(express.json())
@@ -44,14 +45,17 @@ app.post("/ride-from-speech",  async (req, res) => {
     // todo audio to wav
     // const audioBuffer = req.file.buffer;
     // todo pass wav file or path to service
-    let textResponse = await audioToText();
+    let recognizedText = await audioToText();
+    let entities = await recognizeEntities(recognizedText)
     // todo call Rasa or ChatGPT for entity recognition
+    let textResponse = getTextResponse(entities);
 
     res.send({
-        departure: "St. Ulrich",
-        destination: "Klausen",
+        departure: entities.departure,
+        destination: entities.destination,
         date: "2023-11-18 14:00",
-        passengers: 2,
+        passengers: entities.passengers,
+        recognizedText: recognizedText,
         textResponse: textResponse,
         audioResponse: "uuid",
     })
