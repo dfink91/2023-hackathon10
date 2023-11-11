@@ -56,20 +56,27 @@ app.post("/ride-from-speech", upload.single("wavfile"), async (req, res) => {
 
     let recognizedText = await audioToText(paths + "/" + fileName);
 
-    let entities = await recognizeEntities(recognizedText)
+    let entities;
+    let cnt=3
+    while (cnt++ < cnt && !entities)
+        entities = await recognizeEntities(recognizedText)
     //entities = { departure: "ads", destination: "asdf", passengers: 3 }
 
-    let textResponse = getTextResponse(entities);
-
-    res.send({
-        departure: entities.departure,
-        destination: entities.destination,
-        date: "now",
-        passengers: entities.passengers,
-        recognizedText: recognizedText,
-        textResponse: textResponse,
-        audioResponse: "uuid",
-    })
+    if (entities) {
+        let textResponse = getTextResponse(entities);
+    
+        res.send({
+            departure: entities.departure,
+            destination: entities.destination,
+            date: "now",
+            passengers: entities.passengers,
+            recognizedText: recognizedText,
+            textResponse: textResponse,
+            audioResponse: "uuid",
+        })
+    }
+    else 
+        res.status(401).send({error: "Could not understand voice"})
 })
 
 app.get("/get-mp3", async (req, res) => {
