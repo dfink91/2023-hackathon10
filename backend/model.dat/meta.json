@@ -798,13 +798,14 @@
 
     ],
     "ner":[
-      "DEPARTURE",
-      "DESTINATION",
       "LOC",
       "MISC",
-      "NO_OF_PEOPLE",
       "ORG",
-      "PER"
+      "PER",
+      "departure",
+      "destination",
+      "no_of_people",
+      "time"
     ]
   },
   "pipeline":[
