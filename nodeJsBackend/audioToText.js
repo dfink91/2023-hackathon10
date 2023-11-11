@@ -1,6 +1,4 @@
-// todo enable here and set ENV variable for API KEY
 const enableAudioToText = false;
-const keyFilePath = '/Users/lukas/IdeaProjects/NoiHack23/noihackathon23-bcc9300070d9.json';
 const fs = require('fs');
 
 const speech = require('@google-cloud/speech');
@@ -11,7 +9,14 @@ const audioToText = async (fileName) => {
     if (!enableAudioToText){
         return "bitte ein Taxi von St Ulrich zum Hotel Goldener Adler für zwei Personen mit Skiausrüstung (MOCK)";
     }
-    const keyFile = JSON.parse(fs.readFileSync(keyFilePath));
+
+    const keyFile = process.env.GOOGLE_APPLICATION_CREDENTIALS_JSON ? JSON.parse(process.env.GOOGLE_APPLICATION_CREDENTIALS_JSON) : null;
+
+    if (!keyFile){
+        return "Invalid Google Credentials set process.env.GOOGLE_APPLICATION_CREDENTIALS_JSON";
+    }
+
+    //const keyFile = JSON.parse(fs.readFileSync(keyFilePath));
     const client = new speech.SpeechClient({
         credentials: {
             client_email: keyFile.client_email,

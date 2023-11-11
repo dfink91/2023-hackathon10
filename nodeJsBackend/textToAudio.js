@@ -10,9 +10,7 @@ const textToAudio = async (text) => {
         return { audioFileURL: fileURL }
     }
 
-    // todo env variable
-    const keyFilePath = '/Users/lukas/IdeaProjects/NoiHack23/noihackathon23-bcc9300070d9.json';
-    const keyFile = JSON.parse(fs.readFileSync(keyFilePath));
+    const keyFile = process.env.GOOGLE_APPLICATION_CREDENTIALS_JSON ? JSON.parse(process.env.GOOGLE_APPLICATION_CREDENTIALS_JSON) : null;
 
     const client = new textToSpeech.TextToSpeechClient(
         {
