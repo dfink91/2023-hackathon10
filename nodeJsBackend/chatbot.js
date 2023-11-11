@@ -13,12 +13,39 @@ async function recognizeEntities(sentence, language) {
           "Response:",
           response.data
         )
-        return response.data
+        return enhanceBotEntities(response.data)
       })
       .catch((error) => {
         console.error("Error:", error)
       })
   }
+
+function enhanceBotEntities(botResponse) {
+    if (botResponse.when) {
+        const today = new Date();
+        if (botResponse.when.date) {
+    
+            const todayStrings = ["heute", "today", "oggi"];
+            const tomorrowStrings = ["morgen", "tomorrow", "domani"];
+            // Get today's date
+            if (todayStrings.includes(botResponse.when.date?.toLowerCase())) {
+                botResponse.when.date = today.toISOString().slice(0,10);
+            }
+            else if (tomorrowStrings.includes(botResponse.when.date?.toLowerCase())) {
+                // Add one day
+                const tomorrow = new Date(today);
+                tomorrow.setDate(tomorrow.getDate() + 1);
+                botResponse.when.date = tomorrow.toISOString().slice(0,10);
+            }
+        }
+        else if (botResponse.when.time) {
+            botResponse.when.date = today.toISOString().slice(0,10)
+        }
+        else {
+            botResponse.when = "now"
+        }
+    }
+}
 
 
 function getTextResponse(entities, language) {
