@@ -2,8 +2,11 @@ const express = require("express")
 const multer = require("multer")
 const { audioToText } = require("./audioToText");
 const { textToAudio } = require("./textToAudio");
+const { mooovexQuery, mooovexRideDetails } = require("./mooovex")
 
 const app = express()
+app.use(express.json())
+
 //const upload = multer({ storage: multer.memoryStorage() })
 
 app.use((req, res, next) => {
@@ -79,6 +82,29 @@ app.post("save-ride-to-mooovex", async (req, res) => {
     // TODO Save ride to movex
     return res.send({ mooovexId: "mId" })
 })
+
+app.post("/mooovex-autocomplete", async (req, res) => {
+    // Replace these variables with your actual values
+    const query = req.query.query // Replace with your query string
+    const language = req.query.language ?? "de" // Replace with 'de', 'it', or 'en'
+  
+    return mooovexQuery(query, language).then((results) => res.send(results))
+  })
+  
+  app.post("/mooovex-ride", async (req, res) => {
+    console.log("Starting to get ride")
+  
+    const body = req.body
+    const language = req.query.language ?? "de"
+  
+    return mooovexRideDetails(
+      body.origin,
+      body.destination,
+      body.passengers,
+      body.dateObj,
+      language
+    ).then((result) => res.send(result))
+  })
 
 async function transcribeAudioWithWhisper(audioFile) {
     return "This will be transcribed text"
