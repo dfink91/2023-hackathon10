@@ -87,7 +87,7 @@ app.post("/text-to-speech", async (req, res) => {
     console.log("text to speech called for body " + JSON.stringify(req.body))
     const textInput = req.body.textInput;
     const result = await textToAudio(textInput);
-    const mp3FilePath = path.join(__dirname, 'assets', 'mock-response-st-ulrich-de.mp3');
+    const mp3FilePath = path.join(__dirname, 'generatedAudio', 'production-text-to-speech.mp3');
 
     try {
         console.log(mp3FilePath)
