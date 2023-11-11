@@ -106,7 +106,7 @@ function RecorderJSDemo() {
   };
 
   return (
-    <div className="grid h-screen place-items-center">
+    <div className="h-screen place-items-center">
       <div>
       <button className="w-16 h-8 rounded bg-blue-400 m-2" onClick={startRecording} type="button">
         Start
@@ -117,15 +117,13 @@ function RecorderJSDemo() {
 
       </div>
 
-      <div className="text-sm">Start: {data.departure}</div>
-      <div className="text-sm">Ziel: {data.destination}</div>
-      <div className="text-sm">Personen: {data.passengers}</div>
-      <div className="text-sm">Preis: {data?.mooovexRideDetails?.price}</div>
-      <div className="text-sm">Erkannter Text: {data.recognizedText}</div>
-      <div className="text-sm">Antwort in Textform: {data.textResponse}</div>
+      <div className="text-sm"><b>Start:</b> {data.departure}</div>
+      <div className="text-sm"><b>Ziel:</b> {data.destination}</div>
+      <div className="text-sm"><b>Personen:</b> {data.passengers}</div>
+      <div className="text-sm"><b>Preis:</b> {data?.mooovexRideDetails?.price}</div>
+      <div className="text-sm"><b>Erkannter Text:</b> {data.recognizedText}</div>
+      <div className="text-sm"><b>Antwort in Textform:</b> {data.textResponse}</div>
 
-
-      
 
       {audioBlob && (
         <audio className="hidden" autoPlay controls onError={(e) => console.error('Audio playback error:', e)}>
