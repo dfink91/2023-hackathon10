@@ -1,15 +1,22 @@
 from flask import Flask, request
 import requests
 import json
+import os
+from dotenv import load_dotenv
+
+load_dotenv()
 
 app = Flask(__name__)
+
+apikey = os.environ.get('API_KEY')
+print(apikey)
 
 def call_chatgpt(prompt):
     url = "https://api.openai.com/v1/engines/text-davinci-003/completions"
     headers = {
-        "Authorization": "Bearer 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",
-        "Content-Type": "application/json",
-    }
+    "Authorization": f"Bearer {apikey}",
+    "Content-Type": "application/json",
+}
     data = {
         "prompt": prompt,
         "max_tokens": 150
