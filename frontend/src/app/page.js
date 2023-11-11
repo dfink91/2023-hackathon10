@@ -2,11 +2,18 @@
 
 import React from "react";
 import axios from "axios";
+import { useState, useEffect } from "react";
+
 
 function RecorderJSDemo() {
+  const [audioBlob, setAudioBlob] = useState(null);
   let gumStream = null;
   let recorder = null;
   let audioContext = null;
+
+  useEffect(() => {
+    console.log("audioBlob changed")
+  }, [audioBlob])
 
   const startRecording = () => {
     let constraints = {
@@ -57,7 +64,30 @@ function RecorderJSDemo() {
     }
   };
 
-  const onStop = (blob) => {
+  const textToSpeech = async () => {
+    try {
+      const response = await fetch('http://localhost:8080/text-to-speech', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ textInput: 'Hello, this is a test.' }),
+      });
+  
+      if (!response.ok) {
+        throw new Error('Failed to fetch audio');
+      }
+  
+      const audioData = await response.arrayBuffer();
+      const audioBlob = new Blob([audioData], { type: 'audio/mp3' });
+      setAudioBlob(audioBlob);
+    } catch (error) {
+      console.error('Failed to convert text to speech:', error);
+    }
+  }
+      
+
+  const onStop = async (blob) => {
     console.log("uploading...");
 
     let data = new FormData();
@@ -68,17 +98,34 @@ function RecorderJSDemo() {
     const config = {
       headers: { "content-type": "multipart/form-data" },
     };
-    axios.post("http://localhost:8080/ride-from-speech", data, config);
+    let response = await axios.post("http://localhost:8080/ride-from-speech", data, config);
+
+    console.log(response.data)
   };
 
   return (
-    <div>
-      <button onClick={startRecording} type="button">
+    <div className="grid h-screen place-items-center">
+      <div>
+      <button className="w-16 h-8 rounded bg-blue-400 m-2" onClick={startRecording} type="button">
         Start
       </button>
-      <button onClick={stopRecording} type="button">
+      <button className="w-16 h-8 rounded bg-blue-400 m-2" onClick={stopRecording} type="button">
         Stop
       </button>
+
+      <button className="w-16 h-8 rounded bg-blue-400 m-2" onClick={textToSpeech} type="button">
+        text to speech
+      </button>
+      </div>
+
+      {audioBlob && (
+        <audio controls onError={(e) => console.error('Audio playback error:', e)}>
+<source src={URL.createObjectURL(audioBlob)} type="audio/mp3" />
+        Your browser does not support the audio element.
+      </audio>
+      
+      )}
+
     </div>
   );
 }
