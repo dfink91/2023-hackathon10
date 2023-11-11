@@ -2,7 +2,8 @@ const express = require("express")
 const multer = require("multer")
 const { audioToText } = require("./audioToText");
 const { textToAudio } = require("./textToAudio");
-const { mooovexQuery, mooovexRideDetails } = require("./mooovex")
+const { mooovexQuery, mooovexRideDetails } = require("./mooovex");
+const { recognizeEntities, getTextResponse } = require("./chatbot");
 const fs = require('fs').promises;
 const path = require('path');
 
@@ -41,22 +42,25 @@ app.get("/", async (req, res) => {
   res.send("Result: " + result);
 });
 
-app.post("/ride-from-speech", async (req, res) => {
-  console.log("ride-from-speech called")
-  // todo audio to wav
-  // const audioBuffer = req.file.buffer;
-  // todo pass wav file or path to service
-  let textResponse = await audioToText();
-  // todo call Rasa or ChatGPT for entity recognition
+app.post("/ride-from-speech",  async (req, res) => {
+    console.log("ride-from-speech called")
+    // todo audio to wav
+    // const audioBuffer = req.file.buffer;
+    // todo pass wav file or path to service
+    let recognizedText = await audioToText();
+    let entities = await recognizeEntities(recognizedText)
+    // todo call Rasa or ChatGPT for entity recognition
+    let textResponse = getTextResponse(entities);
 
-  res.send({
-    departure: "St. Ulrich",
-    destination: "Klausen",
-    date: "2023-11-18 14:00",
-    passengers: 2,
-    textResponse: textResponse,
-    audioResponse: "uuid",
-  })
+    res.send({
+        departure: entities.departure,
+        destination: entities.destination,
+        date: "2023-11-18 14:00",
+        passengers: entities.passengers,
+        recognizedText: recognizedText,
+        textResponse: textResponse,
+        audioResponse: "uuid",
+    })
 })
 
 app.get("/get-mp3", async (req, res) => {
