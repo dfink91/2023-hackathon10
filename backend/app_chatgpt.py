@@ -34,18 +34,22 @@ def hello():
     print(result)
     result_as_json = json.loads(result)
 
+    if not result_as_json.get('Datum') and not result_as_json.get('Uhrzeit'):
+        when_value = "now"
+    else:
+        when_value = {
+            "date": result_as_json['Datum'],
+            "time": result_as_json['Uhrzeit']
+        }
+
     converted_json = {
         "departure": result_as_json['Abfahrtsort'],
         "destination": result_as_json['Zielort'],
         "no_of_people": result_as_json['Personen'],
-        "when": {
-            "date": result_as_json['Datum'],
-            "time": result_as_json['Uhrzeit']
-        }
+        "when": when_value
     }
-
+    
     return converted_json
-
 
 if __name__ == "__main__":
     app.run(debug=True)
