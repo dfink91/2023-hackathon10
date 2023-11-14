@@ -1,3 +1,4 @@
 /nodeJsBackend/generatedAudio/*
 /nodeJsBackend/audioInputs/*
 .env
+.DS_store
