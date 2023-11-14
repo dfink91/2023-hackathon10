@@ -1,4 +1,5 @@
 # 2023-hackathon10
+DriverHero aims to provide an audio assistant for taxi drivers. As a first use case, it allows taxi drivers to ask for other taxis in case there are many people waiting. The driver can say: "Brauche eine Fahrt von Meran nach Bozen für vier Personen" and the system will record it after asking for confirmation. The technologies used in this project are Speech-To-Text, Entity recognition, Text-to-Speech, and React for the prototype UI. 
 
 Frontend React
 
@@ -30,3 +31,4 @@ To use our spacy integration use
     
 
 Runs on port 3000
+>>>>>>> 9298c567a8158e915168e56dcfa02faaf7c0a710

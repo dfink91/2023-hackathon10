@@ -1,6 +1,0 @@
-@baseUrl = http://127.0.0.1:5000
-@text = "Taxi von Bozen nach Meran morgen um 14:00 Uhr"
-
-GET {{baseUrl}}/recognize?text={{text}}
-content-type: application/json
-###
