@@ -120,7 +120,7 @@ function RecorderJSDemo() {
       <div className="text-sm"><b>Start:</b> {data.departure}</div>
       <div className="text-sm"><b>Ziel:</b> {data.destination}</div>
       <div className="text-sm"><b>Personen:</b> {data.passengers}</div>
-      <div className="text-sm"><b>Preis:</b> {data?.mooovexRideDetails?.price}</div>
+      <div className="text-sm"><b>Preis:</b> {data?.mooovexRideDetails?.price} €</div>
       <div className="text-sm"><b>Erkannter Text:</b> {data.recognizedText}</div>
       <div className="text-sm"><b>Antwort in Textform:</b> {data.textResponse}</div>
 
